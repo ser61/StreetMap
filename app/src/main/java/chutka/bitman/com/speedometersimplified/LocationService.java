@@ -124,19 +124,11 @@ public class LocationService extends Service implements
     private void updateUI() {
         if (MainActivity.p == 0) {
             distance = distance + (lStart.distanceTo(lEnd) / 1000.00);
-            MainActivity.endTime = System.currentTimeMillis();
-            long diff = MainActivity.endTime - MainActivity.startTime;
-            diff = TimeUnit.MILLISECONDS.toMinutes(diff);
-            MainActivity.time.setText("Total Time: " + diff + " minutes");
             if (speed > 0.0)
-                MainActivity.speed.setText("Current speed: " + new DecimalFormat("#.##").format(speed) + " km/hr");
+                MainActivity.btnKilometroje.setText(new DecimalFormat("#.##").format(speed));
             else
-                MainActivity.speed.setText(".......");
-
-            MainActivity.dist.setText(new DecimalFormat("#.###").format(distance) + " Km's.");
-
+                MainActivity.btnKilometroje.setText("0");
             lStart = lEnd;
-
         }
 
     }
