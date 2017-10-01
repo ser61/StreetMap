@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Speedometer</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">StreetMap</string>
+    <string name="title_activity_maps">StreetMap</string>
+    <string name="title_activity_maps2">StreetMap</string>
 
 
 </resources>

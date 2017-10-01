@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "chutka.bitman.com.speedometersimplified"
+        applicationId "edu.uagrm.sergio_w.mapsig"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
