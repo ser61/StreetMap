@@ -1,4 +1,4 @@
-package chutka.bitman.com.speedometersimplified;
+package edu.uagrm.sergio_w.mapsig;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

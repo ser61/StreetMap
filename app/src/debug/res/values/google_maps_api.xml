@@ -7,9 +7,7 @@
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=FE:D0:B6:1D:DA:7A:8A:4E:A4:E7:4A:3F:7F:6C:21:4F:E7:81:28:F2%3Bchutka.bitman.com.speedometersimplified
 
     You can also add your credentials to an existing key, using this line:
-    FE:D0:B6:1D:DA:7A:8A:4E:A4:E7:4A:3F:7F:6C:21:4F:E7:81:28:F2;chutka.bitman.com.speedometersimplified
-
-    Alternatively, follow the directions here:
+    FE:D0:B6:1D:DA:7A:8A:4E:A4:E7:4A:3F:7F:6C:21:4F:E7:81:28:F2;mapsigvely, follow the directions here:
     https://developers.google.com/maps/documentation/android/start#get-key
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"

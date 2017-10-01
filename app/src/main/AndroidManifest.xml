@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="chutka.bitman.com.speedometersimplified">
+    package="edu.uagrm.sergio_w.mapsig">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="edu.uagrm.sergio_w.mapsig.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".LocationService" />
+        <service android:name="edu.uagrm.sergio_w.mapsig.LocationService" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -45,7 +45,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="edu.uagrm.sergio_w.mapsig.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
     </application>
 

@@ -1,4 +1,4 @@
-package chutka.bitman.com.speedometersimplified;
+package edu.uagrm.sergio_w.mapsig;
 
 import android.app.Service;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,7 +16,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.text.DecimalFormat;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by vipul on 12/13/2015.
