@@ -17,9 +17,6 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.DecimalFormat;
 
-/**
- * Created by vipul on 12/13/2015.
- */
 public class LocationService extends Service implements
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
