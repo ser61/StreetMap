@@ -32,7 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import edu.uagrm.sergio_w.mapsig.interfaces.EMainActivity;
 import edu.uagrm.sergio_w.mapsig.interfaces.IMainActivity;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, IMainActivity{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
     LocationService myService;
@@ -49,7 +49,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         public void onServiceConnected(ComponentName name, IBinder service) {
             LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
             myService = binder.getService();
-            myService.addListener(this);
+            myService.addEventListener(new IMainActivity() {
+                @Override
+                public void move(EMainActivity event) {
+                    mMap.clear();
+                    LatLng currentPosition = new LatLng(event.getLocation().getLatitude(),event.getLocation().getLongitude());
+                    mMap.addMarker(new MarkerOptions()
+                            .position(currentPosition)
+                            .snippet("Lat:" + event.getLocation().getLatitude() + " Lng:"+ event.getLocation().getLongitude())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                            .title("ME"));
+
+                    double latitude = event.getLocation().getLatitude();
+                    double longitude = event.getLocation().getLongitude();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude,longitude)).zoom(15f).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
+            });
             status = true;
         }
 
@@ -256,21 +272,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent i = new Intent(getApplicationContext(), LocationService.class);
         unbindService(sc);
         status = false;
-    }
-
-    @Override
-    public void move(EMainActivity event) {
-        mMap.clear();
-        LatLng currentPosition = new LatLng(event.getLocation().getLatitude(),event.getLocation().getLongitude());
-        mMap.addMarker(new MarkerOptions()
-                .position(currentPosition)
-                .snippet("Lat:" + event.getLocation().getLatitude() + " Lng:"+ event.getLocation().getLongitude())
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .title("ME"));
-
-        double latitude = event.getLocation().getLatitude();
-        double longitude = event.getLocation().getLongitude();
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude,longitude)).zoom(15f).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }

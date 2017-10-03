@@ -106,7 +106,7 @@ public class LocationService extends Service implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {}
 
-    public void addListener(IMainActivity listener) {
+    public void addEventListener(IMainActivity listener) {
         this.listener.add(listener);
     }
 
