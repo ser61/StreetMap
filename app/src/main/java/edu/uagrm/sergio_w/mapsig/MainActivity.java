@@ -146,11 +146,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        LatLng scz = new LatLng(-17.814980, -63.164108);
+        LatLng scz = new LatLng(-17.781886, -63.182335);
         addMyLocation(true);
-        mMap.addMarker(new MarkerOptions().position(scz).title("Estas en Santa Cruz."));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(scz));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(scz,14));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
     }
