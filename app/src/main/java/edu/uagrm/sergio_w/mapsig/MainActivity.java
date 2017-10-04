@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static boolean status;
     LocationManager locationManager;
     private boolean bandera = false;
+    private Signs signs;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void move(EMainActivity event) {
                     mMap.clear();
                     LatLng currentPosition = new LatLng(event.getLocation().getLatitude(),event.getLocation().getLongitude());
+                    signs.draw();
                     mMap.addMarker(new MarkerOptions()
                             .position(currentPosition)
                             .snippet("Lat:" + event.getLocation().getLatitude() + " Lng:"+ event.getLocation().getLongitude())
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
-
+        signs = new Signs();
         isAlowedReadPermission();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -133,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -148,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         LatLng scz = new LatLng(-17.781886, -63.182335);
         addMyLocation(true);
+        signs.setmMap(mMap);
+        signs.draw();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(scz,14));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
