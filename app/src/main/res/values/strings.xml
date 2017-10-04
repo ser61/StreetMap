@@ -2,6 +2,17 @@
     <string name="app_name">StreetMap</string>
     <string name="title_activity_maps">StreetMap</string>
     <string name="title_activity_maps2">StreetMap</string>
+    <string name="no_girar_izq">No debe girar a la izquierda.</string>
+    <string name="pare">Hay un señal de Pare adelante.</string>
+    <string name="zona_hospital">Esta en Zona Hospital.</string>
+    <string name="max_20">La velocidad permitida es de 20 kilometros hora.</string>
+    <string name="rompe_muelle">Hay un Rompe Muelle adelante.</string>
+    <string name="zona_escolar">Esta en una Zona Escolar.</string>
+    <string name="semaforo">Hay un semaforo adelante.</string>
+    <string name="max_50">La velocidad permitida es de 50 kilometros hora.</string>
+    <string name="ceda_paso">Aqui debe ceder el Paso.</string>
+    <string name="max_40">La velocidad permitida es de 40 kilometros hora.</string>
+    <string name="no_girar_u">No debe girar en U.</string>
 
 
 </resources>

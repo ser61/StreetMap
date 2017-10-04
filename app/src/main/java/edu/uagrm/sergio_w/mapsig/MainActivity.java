@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -41,8 +43,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static int p = 0;
     static Button btnKilometroje;
     static boolean status;
+    private double miLatitude, miLongitude;
     LocationManager locationManager;
     private boolean bandera = false;
+    private Alertar alertar;
     private Signs signs;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -55,15 +59,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mMap.clear();
                     LatLng currentPosition = new LatLng(event.getLocation().getLatitude(),event.getLocation().getLongitude());
                     signs.draw();
+                    miLatitude = event.getLocation().getLatitude();
+                    miLongitude = event.getLocation().getLongitude();
                     mMap.addMarker(new MarkerOptions()
                             .position(currentPosition)
-                            .snippet("Lat:" + event.getLocation().getLatitude() + " Lng:"+ event.getLocation().getLongitude())
+                            .snippet("Lat:" + miLatitude + " Lng:"+ miLongitude)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                             .title("ME"));
 
-                    double latitude = event.getLocation().getLatitude();
-                    double longitude = event.getLocation().getLongitude();
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude,longitude)).zoom(15f).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(miLatitude,miLongitude)).zoom(15f).build();
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
             });
@@ -82,7 +86,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
-        signs = new Signs();
+        signs = new Signs(this);
+        alertar = new Alertar();
+        alertar.setPause(true);
+        alertar.execute();
         isAlowedReadPermission();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -95,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (bandera) {
                     btnKilometroje.setVisibility(View.GONE);
                     bandera = false;
+                    alertar.setPause(true);
                     if (status == true)
                         unbindService();
                     p = 0;
@@ -105,29 +113,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
                     if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
                         return;
                     }
-
 
                     if (status == false)
                         //Here, the Location Service gets bound and the GPS Speedometer gets Active.
                         bindService();
-                    locate = new ProgressDialog(MainActivity.this);
-                    locate.setIndeterminate(true);
-                    locate.setCancelable(false);
-                    locate.setMessage("Obteniendo ubicacion...");
-                    locate.show();
+                        locate = new ProgressDialog(MainActivity.this);
+                        locate.setIndeterminate(true);
+                        locate.setCancelable(false);
+                        locate.setMessage("Obteniendo ubicacion...");
+                        locate.show();
+                        alertar.setPause(false);
+                    }
                 }
             }
-        });
-
-
-
+        );
     }
 
     @Override
     protected void onResume() {
+        alertar.setPause(false);
         super.onResume();
     }
 
@@ -139,8 +145,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (status == true)
-            unbindService();
+        alertar.setPause(true);
+        alertar.cancel(true);
+        if (status == true)unbindService();
+    }
+
+    @Override
+    protected void onPause() {
+        alertar.setPause(true);
+        super.onPause();
     }
 
     @Override
@@ -272,5 +285,55 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent i = new Intent(getApplicationContext(), LocationService.class);
         unbindService(sc);
         status = false;
+    }
+
+    private class Alertar extends AsyncTask<Void, Void, Void>{
+
+        private boolean pause;
+
+        public Alertar() {
+            this.pause = false;
+        }
+
+        public boolean isPause() {
+            return pause;
+        }
+
+        public void setPause(boolean pause) {
+            this.pause = pause;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while (true) {
+                if (pause) {
+
+                } else {
+                    try {
+                        Thread.sleep(2000);
+                        publishProgress();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            Location miLocacion = new Location("");
+            miLocacion.setLatitude(miLatitude);
+            miLocacion.setLongitude(miLongitude);
+
+            for (Signs.Coord coord : signs.getCoords()) {
+                Location locSign = new Location("");
+                locSign.setLatitude(coord.getLat());
+                locSign.setLongitude(coord.getLog());
+                float distanceInMeters = miLocacion.distanceTo(locSign);
+                if (distanceInMeters < 25.00) {
+                    Toast.makeText(MainActivity.this,"Señal cerca", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }
