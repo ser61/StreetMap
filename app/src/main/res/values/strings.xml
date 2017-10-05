@@ -3,6 +3,7 @@
     <string name="title_activity_maps">StreetMap</string>
     <string name="title_activity_maps2">StreetMap</string>
     <string name="no_girar_izq">No debe girar a la izquierda.</string>
+    <string name="no_girar_der">No debe girar a la derecha.</string>
     <string name="pare">Hay un señal de Pare adelante.</string>
     <string name="zona_hospital">Esta en Zona Hospital.</string>
     <string name="max_20">La velocidad permitida es de 20 kilometros hora.</string>

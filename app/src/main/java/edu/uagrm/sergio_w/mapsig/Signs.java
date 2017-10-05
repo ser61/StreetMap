@@ -37,6 +37,7 @@ public class Signs {
     public static final int ZONA_HOSPITAL = R.drawable.hospital;        //7
     public static final int NO_GIRAR_U = R.drawable.no_girar_u;         //8
     public static final int SEMAFORO = R.drawable.semaforo;             //9
+    public static final int NO_GIRAR_DER = R.drawable.no_girar_der;     //10
 
     public Signs(GoogleMap mMap) {
         this.mMap = mMap;
@@ -68,7 +69,7 @@ public class Signs {
 
     private void Init() {
         coords.add(new Coord(-17.78823000, -63.171288,PARE, context.getString(R.string.pare)));
-        coords.add(new Coord(-17.787653, -63.171377, NO_GIRAR_IZQ, context.getResources().getString(R.string.no_girar_izq)));//der
+        coords.add(new Coord(-17.787653, -63.171377, NO_GIRAR_DER, context.getResources().getString(R.string.no_girar_der)));
         coords.add(new Coord(-17.788515, -63.169704, ZONA_HOSPITAL, context.getString(R.string.zona_hospital)));
         coords.add(new Coord(-17.788577, -63.169426, MAX20, context.getString(R.string.max_20)));
         coords.add(new Coord(-17.788618, -63.168681, ROMPE_MUELLE, context.getString(R.string.rompe_muelle)));
@@ -83,7 +84,7 @@ public class Signs {
         coords.add(new Coord(-17.785540, -63.171623, SEMAFORO, context.getString(R.string.semaforo)));
         coords.add(new Coord(-17.785742, -63.171720, SEMAFORO, context.getString(R.string.semaforo)));
         coords.add(new Coord(-17.786502, -63.171535, PARE, context.getString(R.string.pare)));
-        coords.add(new Coord(-17.786572, -63.171524, NO_GIRAR_IZQ, context.getResources().getString(R.string.no_girar_izq)));//der
+        coords.add(new Coord(-17.786572, -63.171524, NO_GIRAR_DER, context.getResources().getString(R.string.no_girar_der)));
         coords.add(new Coord(-17.787580, -63.171375, PARE, context.getString(R.string.pare)));
         coords.add(new Coord(-17.786274, -63.167646, SEMAFORO, context.getString(R.string.semaforo)));
         coords.add(new Coord(-17.786324, -63.167662, SEMAFORO, context.getString(R.string.semaforo)));
@@ -148,6 +149,14 @@ public class Signs {
             this.sign = sign;
             this.alarma = alarma;
             this.estado = false;
+        }
+
+        public String getAlarma() {
+            return alarma;
+        }
+
+        public void setAlarma(String alarma) {
+            this.alarma = alarma;
         }
 
         public boolean isEstado() {

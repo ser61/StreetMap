@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -30,24 +31,25 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Locale;
+
 import edu.uagrm.sergio_w.mapsig.interfaces.EMainActivity;
 import edu.uagrm.sergio_w.mapsig.interfaces.IMainActivity;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
-    LocationService myService;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int STORAGE_PERMISSION_CODE = 23;
-    static ProgressDialog locate;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1, STORAGE_PERMISSION_CODE = 23;
+    static boolean status, bandera = false;
+    private double miLatitude, miLongitude;
     static int p = 0;
     static Button btnKilometroje;
-    static boolean status;
-    private double miLatitude, miLongitude;
+    static ProgressDialog locate;
     LocationManager locationManager;
-    private boolean bandera = false;
+    LocationService myService;
     private Alertar alertar;
     private Signs signs;
+    private TextToSpeech talk;
     private ServiceConnection sc = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -88,8 +90,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        setSupportActionBar(toolbar);
         signs = new Signs(this);
         alertar = new Alertar();
-        alertar.setPause(true);
-        alertar.execute();
+        talk = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    Locale locSpanish = new Locale("es_ES");
+                    talk.setLanguage(locSpanish);
+                    alertar.setPause(true);
+                    alertar.execute();
+                } else {
+                    Toast.makeText(getApplicationContext(), "ERROR...",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         isAlowedReadPermission();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -100,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 if (bandera) {
+                    sayMessage("Navegacion Desactivada.");
                     btnKilometroje.setVisibility(View.GONE);
                     bandera = false;
                     alertar.setPause(true);
@@ -107,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         unbindService();
                     p = 0;
                 } else {
+                    sayMessage("Navegacion Activada.");
                     btnKilometroje.setVisibility(View.VISIBLE);
                     bandera = true;
                     checkGps();
@@ -129,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         );
+    }
+
+    public void sayMessage(String msj) {
+        talk.speak(msj, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     @Override
@@ -293,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         public Alertar() {
             this.pause = false;
+
         }
 
         public boolean isPause() {
@@ -324,14 +344,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Location miLocacion = new Location("");
             miLocacion.setLatitude(miLatitude);
             miLocacion.setLongitude(miLongitude);
-
             for (Signs.Coord coord : signs.getCoords()) {
                 Location locSign = new Location("");
                 locSign.setLatitude(coord.getLat());
                 locSign.setLongitude(coord.getLog());
                 float distanceInMeters = miLocacion.distanceTo(locSign);
                 if (distanceInMeters < 25.00) {
-                    Toast.makeText(MainActivity.this,"Señal cerca", Toast.LENGTH_LONG).show();
+                    if (!coord.isEstado()) {
+                        sayMessage(coord.getAlarma());
+                        coord.setEstado(true);
+                    }
+                } else {
+                    coord.setEstado(false);
                 }
             }
         }
