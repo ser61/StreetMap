@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                             .title("ME"));
 
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(miLatitude,miLongitude)).zoom(15f).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(miLatitude,miLongitude)).zoom(19f).build();
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
             });
@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 } else {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(100);
                         publishProgress();
                     } catch (InterruptedException e) {
                         e.printStackTrace();

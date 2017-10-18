@@ -1,6 +1,8 @@
 package edu.uagrm.sergio_w.mapsig;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 
 import com.google.android.gms.drive.internal.StringListResponse;
 import com.google.android.gms.maps.GoogleMap;
@@ -580,8 +582,15 @@ public class Signs {
     public void draw() {
         for (Coord coord : coords) {
             LatLng locate = new LatLng(coord.getLat(), coord.getLog());
-            mMap.addMarker(new MarkerOptions().position(locate).icon(BitmapDescriptorFactory.fromResource(coord.getSign())));
+            Bitmap smallMarker = smallerMarker(50, 50, coord.getSign());
+            mMap.addMarker(new MarkerOptions().position(locate).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         }
+    }
+
+    private Bitmap smallerMarker(int width, int height, int sign) {
+        BitmapDrawable bitmapdraw=(BitmapDrawable)context.getResources().getDrawable(sign);
+        Bitmap b = bitmapdraw.getBitmap();
+        return Bitmap.createScaledBitmap(b, width, height, false);
     }
 
     public class Coord{
